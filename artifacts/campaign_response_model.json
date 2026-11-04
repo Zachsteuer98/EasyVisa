@@ -1,0 +1,9 @@
+{
+  "model_name": "Cost complexity pruned decision tree",
+  "selection_metric": "precision",
+  "ccp_alpha": 0.003,
+  "random_state": 42,
+  "training_rows": 5000,
+  "sklearn_version": "1.7.2",
+  "target": "Personal_Loan: acceptance of a historical campaign offer"
+}
