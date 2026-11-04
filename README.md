@@ -3,7 +3,10 @@ title: Personal Loan Campaign
 emoji: 📊
 colorFrom: blue
 colorTo: indigo
-sdk: static
+sdk: streamlit
+sdk_version: "1.51.0"
+python_version: "3.10"
+app_file: app.py
 pinned: false
 ---
 
