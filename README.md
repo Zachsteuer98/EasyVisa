@@ -10,52 +10,86 @@ app_file: app.py
 pinned: false
 ---
 
-# Personal Loan Campaign
-
-A static web application hosted on Hugging Face Spaces.
-
 # Personal Loan Campaign Response
 
-A project analyzing historical bank customer data and comparing decision tree models to estimate which existing customers are more likely to accept a personal loan campaign offer, helping prioritize marketing outreach.
+An applied machine learning project developed through Great Learning. It uses historical bank customer data to study which existing customers accepted a personal loan campaign offer, compares decision tree models, and presents a response estimate in an interactive Streamlit application.
 
-## Project question
-Which existing bank customers are more likely to accept a personal loan campaign offer, and how can a response prediction help prioritize future outreach?
+> **Scope:** The model estimates response to a historical marketing offer. It does not assess creditworthiness, repayment risk, or loan eligibility, and it should not be used to make lending decisions.
 
-**The model predicts historical campaign acceptance. It does not determine creditworthiness, loan repayment risk, or loan approval.**
+## Project links
+
+- **Live application:** [Personal Loan Campaign on Hugging Face Spaces](https://huggingface.co/spaces/zachsteuer98/PersonalLoanCampaign)
+- **Source code:** [Zachsteuer98/EasyVisa on GitHub](https://github.com/Zachsteuer98/EasyVisa)
+- **Analysis notebook:** [Open the notebook in Google Colab](https://colab.research.google.com/github/Zachsteuer98/EasyVisa/blob/main/personal_loan_campaign_model_selection.ipynb)
+
+## Project background
+
+The work began as a guided data science learning project in Google Colab and was then organized to run in a local Python environment. The analysis explores a binary classification problem: predict whether an existing bank customer accepted a prior personal loan offer. The resulting model is demonstrated through a web form so users can explore how customer attributes affect a campaign response estimate.
+
+The dataset contains 5,000 customer records. The target, `Personal_Loan`, records acceptance of the historical offer (`1`) or non-acceptance (`0`). The project is focused on supervised learning, model selection, and communicating the limits of a prediction in a business context.
+
+## What the project covers
+
+- Inspecting data quality, class balance, and relationships among customer attributes.
+- Exploring historical response patterns while distinguishing association from causation.
+- Preparing predictors and excluding identifiers and redundant fields from modeling.
+- Comparing baseline, pre-pruned, and cost-complexity-pruned decision trees.
+- Using stratified five-fold cross-validation on the training data to select a model by precision, recall, or F1.
+- Reserving a stratified holdout set for final evaluation after model selection.
+- Packaging the selected model for an interactive Streamlit application.
+
+The notebook's default selection criterion is precision, which favors a smaller predicted outreach list with a higher share of historical responders. Recall and F1 are also considered because the most useful metric depends on campaign goals and contact costs.
+
+## Learning outcomes
+
+Reviewing this project demonstrates a practical workflow for:
+
+- Framing a business question as a binary classification task.
+- Inspecting a dataset and recognizing the effects of class imbalance.
+- Preparing features consistently for training and prediction.
+- Comparing evaluation metrics and separating model selection from final testing.
+- Interpreting tree-based feature importance cautiously.
+- Turning a trained model into a small web application and documenting its intended use.
+
+## Repository contents
+
+| File or directory | Purpose |
+| --- | --- |
+| `personal_loan_campaign_model_selection.ipynb` | Data checks, exploratory analysis, cross-validated model selection, holdout evaluation, and limitations. |
+| `Loan_Modelling(1).csv` | Historical customer campaign dataset used by the notebook and training script. |
+| `app.py` | Streamlit interface for entering a customer profile and viewing a campaign response estimate. |
+| `model.py` | Shared feature preparation and selected decision tree configuration. |
+| `train_model.py` | Fits the selected model on the bundled dataset and saves its artifacts. |
+| `artifacts/campaign_response_model.joblib` | Serialized model bundle loaded by the application. |
+| `artifacts/campaign_response_model.json` | Training and model selection metadata. |
+| `requirements.txt` | Dependencies for the Streamlit application. |
+| `requirements-notebook.txt` | Additional dependencies for notebook analysis and visualizations. |
 
 ## Run the notebook
 
-1. Create and activate a Python environment.
-2. Install dependencies: `python -m pip install -r requirements-notebook.txt`
-3. Place `Loan_Modelling(1).csv` beside `personal_loan_campaign_model_selection.ipynb`.
-4. Open the notebook and run all cells from top to bottom.
+The notebook was developed for Google Colab and is also available to run locally.
 
-The notebook uses stratified cross-validation on the training split to compare baseline, precision-focused, recall-focused, and cost complexity pruned decision trees. Set `SELECTION_METRIC` to `precision`, `recall`, or `f1` to choose what “best” means for your campaign. The held-out test split is reserved for final evaluation after model selection.
+1. Open the notebook using the Colab link above, or clone this repository and open `personal_loan_campaign_model_selection.ipynb` in Jupyter.
+2. Ensure `Loan_Modelling(1).csv` is available alongside the notebook. In Colab, upload the CSV into the notebook session or mount storage containing it.
+3. For a local environment, install the notebook dependencies with `python -m pip install -r requirements-notebook.txt`.
+4. Run the notebook cells from top to bottom.
 
-## Files
+## Run the application locally
 
-- `personal_loan_campaign_model_selection.ipynb` — data checks, exploration, model selection, evaluation, and limitations.
-- `app.py` — public-facing Streamlit demo interface.
-- `model.py` — shared feature preparation and selected model definition.
-- `train_model.py` — retrains and saves the selected model artifact.
-- `artifacts/campaign_response_model.joblib` — fitted model used by the web app.
-- `artifacts/campaign_response_model.json` — model selection and training metadata.
-- `Loan_Modelling(1).csv` — dataset used by the notebook.
-- `requirements.txt` — pinned dependencies for the web app.
-- `requirements-notebook.txt` — extra notebook and plotting dependencies.
+```bash
+python -m pip install -r requirements.txt
+python train_model.py
+streamlit run app.py
+```
 
-## Run the website locally
+The application opens at the local URL printed by Streamlit, usually `http://localhost:8501`. The training script reads the bundled CSV and generates the model bundle and metadata in `artifacts/`.
 
-1. Install dependencies with `python -m pip install -r requirements.txt`.
-2. Build the selected model artifact with `python train_model.py`.
-3. Launch the web app with `streamlit run app.py`.
+## Deployment
 
-The app uses the cost complexity pruned decision tree selected by cross-validated precision in the notebook. It refits that selected model configuration on all rows in the historical dataset for the demo. The form predicts whether an existing customer is likely to accept a personal loan offer, supporting campaign outreach prioritization; it does not make a lending decision.
+The live demo is hosted as a Streamlit Space on Hugging Face. Its Space configuration is provided by the YAML block at the top of this README; it identifies the Streamlit SDK, Python version, and `app.py` entry point. The app also requires `requirements.txt` and the trained model at `artifacts/campaign_response_model.joblib`.
 
-## Publish the website
+The GitHub repository includes an Actions workflow intended to sync changes from its `main` branch to the Hugging Face Space. The workflow uses the `HF_TOKEN` GitHub Actions secret for authentication. Keep the Hugging Face Space configuration and required model artifact in place when updating or deploying the app.
 
-The app is structured for Streamlit Community Cloud. Push this project to a GitHub repository with `app.py`, `requirements.txt`, and `artifacts/campaign_response_model.joblib` included. In Community Cloud, create an app from that repository and set the entrypoint to `app.py`. Regenerate the model artifact from the bundled CSV with `python train_model.py` before publishing if you retrain it.
+## Limitations and responsible use
 
-## Limitations
-
-The data describe a historical campaign and may not reflect future customers or campaigns. Model metrics should not be interpreted as evidence of loan repayment performance or causal customer behavior. Validate against a later campaign and evaluate campaign lift and contact economics before operational use.
+The records describe responses to a past campaign; behavior, customer populations, and campaign design may differ in future settings. Associations and feature importance do not establish why a customer accepted an offer. Cross-validation and holdout scores estimate performance on data similar to this dataset and are not a guarantee of future results. Before considering operational use, validate with newer campaign data and account for outreach costs, fairness, privacy, and business outcomes. This demo is for educational exploration and campaign response analysis only.
