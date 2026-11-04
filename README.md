@@ -1,3 +1,16 @@
+---
+title: Personal Loan Campaign
+emoji: 📊
+colorFrom: blue
+colorTo: indigo
+sdk: static
+pinned: false
+---
+
+# Personal Loan Campaign
+
+A static web application hosted on Hugging Face Spaces.
+
 # Personal Loan Campaign Response
 
 A project analyzing historical bank customer data and comparing decision tree models to estimate which existing customers are more likely to accept a personal loan campaign offer, helping prioritize marketing outreach.
